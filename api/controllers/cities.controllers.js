@@ -59,10 +59,10 @@ module.exports.addOne = function (req, res) {
         attractions: req.body.attractions
     };
     City.create(newCity, function (err, city) {
-        const response = { status: 201, message: city };
+        const response = { status: process.env.OK_STATUS_CODE_INSERT, message: city };
         if (err) {
             console.log("Error creating city");
-            response.status = 500;
+            response.status = process.env.INTERNAL_SERVER_ERROR_STATUS;
             response.message = err;
         }
         res.status(response.status).json(response.message);
@@ -73,16 +73,16 @@ module.exports.deleteOne = function (req, res) {
     const cityId = req.params.cityId;
     City.findByIdAndDelete(cityId).exec(function(err,deletedCity){
         const response = {
-            status: 200,
+            status: process.env.OK_STATUS_CODE,
             message: deletedCity
         };
         if (err) {
             console.log("Error deleting city");
-            response.status = 500;
+            response.status = process.env.INTERNAL_SERVER_ERROR_STATUS;
             response.message = err;
         } else if (!deletedCity) {
             console.log("City id not found");
-            response.status = 404;
+            response.status = process.env.NOT_FOUND_STATUS_CODE;
             response.message = { "message": "City ID not found" };
         }
         res.status(response.status).json(response.message);
@@ -92,10 +92,10 @@ module.exports.updateOne=function(req,res){
     const cityId = req.params.cityId;
     City.findById(cityId).exec(function (err, city) {
         if (err) {
-            res.status(500).json(err);
+            res.status(process.env.INTERNAL_SERVER_ERROR_STATUS).json(err);
             return;
         } else if (!city) {
-            res.status(500).json("City id not found");
+            res.status(process.env.INTERNAL_SERVER_ERROR_STATUS).json("City id not found");
             return;
         }
         city.cityName= req.body.cityName;
@@ -105,11 +105,11 @@ module.exports.updateOne=function(req,res){
         city.save(function(err,city){
             console.log(city);
             if(err){
-                res.status(500).json(err);           
+                res.status(process.env.INTERNAL_SERVER_ERROR_STATUS).json(err);           
             }else if(!city){
-                res.status(500).json(err);           
+                res.status(process.env.INTERNAL_SERVER_ERROR_STATUS).json(err);           
             }
-            res.status(200).json(city);           
+            res.status(process.env.OK_STATUS_CODE).json(city);           
         });
                       
     });
@@ -119,10 +119,10 @@ module.exports.updateOnePartial=function(req,res){
     const cityId = req.params.cityId;
     City.findById(cityId).exec(function (err, city) {
         if (err) {
-            res.status(500).json(err);
+            res.status(process.env.INTERNAL_SERVER_ERROR_STATUS).json(err);
             return;
         } else if (!city) {
-            res.status(500).json("City id not found");
+            res.status(process.env.INTERNAL_SERVER_ERROR_STATUS).json("City id not found");
             return;
         }
         if (req.body.cityName) 
@@ -136,11 +136,11 @@ module.exports.updateOnePartial=function(req,res){
         city.save(function(err,city){
             console.log(city);
             if(err){
-                res.status(500).json(err);           
+                res.status(process.env.INTERNAL_SERVER_ERROR_STATUS).json(err);           
             }else if(!city){
-                res.status(500).json(err);           
+                res.status(process.env.INTERNAL_SERVER_ERROR_STATUS).json(err);           
             }
-            res.status(200).json(city);           
+            res.status(process.env.OK_STATUS_CODE).json(city);           
         });
                       
     });
