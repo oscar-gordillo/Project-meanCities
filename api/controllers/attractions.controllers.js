@@ -133,9 +133,9 @@ module.exports.getOne = function (req, res) {
 
 
 
-const _updateAttraction = function (req, res, city) {
+const _updateAttractionFull = function (req, res, city) {
     let index = city.attractions.findIndex( attraction => attraction._id == req.params.attractionId );
-    if (index) {
+    if (index!=-1) {
         city.attractions[index].name=req.body.name;
         city.attractions[index].interestingFacts=req.body.interestingFacts;
     }else{
@@ -155,35 +155,19 @@ const _updateAttraction = function (req, res, city) {
         res.status(response.status).json(response.message);
     });
 }
-module.exports.updateOne = function (req, res) {
-    console.log("Update One attractions Controller");
-    const cityId = req.params.cityId;
-    City.findById(cityId).select("attractions").exec(function (err, city) {
-        console.log("Found city ", city);
-        const response = { status: process.env.OK_STATUS_CODE, message: city.attractions };
-        if (err) {
-            console.log("Error finding city");
-            response.status = process.env.INTERNAL_SERVER_ERROR_STATUS;
-            response.message = err;
-        } else if (!city) {
-            console.log("Error finding city");
-            response.status = process.env.NOT_FOUND_STATUS_CODE;
-            response.message = { "message": "city ID not found " + cityId };
-        }
-        if (city) {
-            _updateAttraction(req, res, city);
-        } else {
-            res.status(response.status).json(response.message);
-        }
-    });
+module.exports.updateOneFull = function (req, res) {
+    _updateOneWithCallback(req,res,_updateAttractionFull);
 }
 
 
 
 
 const _updateAttractionPartial = function (req, res, city) {
-    let index = city.attractions.findIndex( attraction => attraction._id == req.params.attractionId );
-    if (index) {
+    console.log(city.attractions);
+    console.log('req.params.attractionId',req.params.attractionId);
+    index = city.attractions.findIndex( attraction => attraction._id == req.params.attractionId );
+    console.log('index',index);
+    if (index!=-1) {
         if (req.body.name) 
             city.attractions[index].name=req.body.name;
         if (req.body.interestingFacts)
@@ -205,7 +189,8 @@ const _updateAttractionPartial = function (req, res, city) {
         res.status(response.status).json(response.message);
     });
 }
-module.exports.updateOnePartial = function (req, res) {
+
+function _updateOneWithCallback(req,res,functionToBeCalled){
     console.log("Update One attractions Controller");
     const cityId = req.params.cityId;
     City.findById(cityId).select("attractions").exec(function (err, city) {
@@ -221,9 +206,13 @@ module.exports.updateOnePartial = function (req, res) {
             response.message = { "message": "city ID not found " + cityId };
         }
         if (city) {
-            _updateAttractionPartial(req, res, city);
+            functionToBeCalled(req, res, city);
         } else {
             res.status(response.status).json(response.message);
         }
     });
+}
+
+module.exports.updateOnePartial = function (req, res) {
+    _updateOneWithCallback(req,res,_updateAttractionPartial);
 }

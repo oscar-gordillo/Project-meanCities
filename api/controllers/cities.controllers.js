@@ -88,43 +88,16 @@ module.exports.deleteOne = function (req, res) {
         res.status(response.status).json(response.message);
     });    
 }
-module.exports.updateOne=function(req,res){
-    const cityId = req.params.cityId;
-    City.findById(cityId).exec(function (err, city) {
-        if (err) {
-            res.status(process.env.INTERNAL_SERVER_ERROR_STATUS).json(err);
-            return;
-        } else if (!city) {
-            res.status(process.env.INTERNAL_SERVER_ERROR_STATUS).json("City id not found");
-            return;
-        }
-        city.cityName= req.body.cityName;
-        city.countryName= req.body.countryName;
-        city.yearVisited= req.body.yearVisited;
-        city.attractions= req.body.attractions;
-        city.save(function(err,city){
-            console.log(city);
-            if(err){
-                res.status(process.env.INTERNAL_SERVER_ERROR_STATUS).json(err);           
-            }else if(!city){
-                res.status(process.env.INTERNAL_SERVER_ERROR_STATUS).json(err);           
-            }
-            res.status(process.env.OK_STATUS_CODE).json(city);           
-        });
-                      
-    });
+
+function _returnCityFull(req,city){
+    city.cityName= req.body.cityName;
+    city.countryName= req.body.countryName;
+    city.yearVisited= req.body.yearVisited;
+    city.attractions= req.body.attractions;
+    return city;
 }
 
-module.exports.updateOnePartial=function(req,res){
-    const cityId = req.params.cityId;
-    City.findById(cityId).exec(function (err, city) {
-        if (err) {
-            res.status(process.env.INTERNAL_SERVER_ERROR_STATUS).json(err);
-            return;
-        } else if (!city) {
-            res.status(process.env.INTERNAL_SERVER_ERROR_STATUS).json("City id not found");
-            return;
-        }
+function _returnCityPartial(req,city){
         if (req.body.cityName) 
             city.cityName= req.body.cityName;
         if (req.body.countryName) 
@@ -133,6 +106,20 @@ module.exports.updateOnePartial=function(req,res){
             city.yearVisited= req.body.yearVisited;
         if (req.body.attractions) 
             city.attractions= req.body.attractions;
+    return city;
+}
+
+function _updateOne(req,res,functionToBeCalled){
+    const cityId = req.params.cityId;
+    City.findById(cityId).exec(function (err, city) {
+        if (err) {
+            res.status(process.env.INTERNAL_SERVER_ERROR_STATUS).json(err);
+            return;
+        } else if (!city) {
+            res.status(process.env.INTERNAL_SERVER_ERROR_STATUS).json("City id not found");
+            return;
+        }
+        city=functionToBeCalled(req,city);
         city.save(function(err,city){
             console.log(city);
             if(err){
@@ -142,6 +129,12 @@ module.exports.updateOnePartial=function(req,res){
             }
             res.status(process.env.OK_STATUS_CODE).json(city);           
         });
-                      
     });
+}
+module.exports.updateOneFull=function(req,res){
+    _updateOne(req,res,_returnCityFull);
+}
+
+module.exports.updateOnePartial=function(req,res){
+    _updateOne(req,res,_returnCityPartial);
 }
