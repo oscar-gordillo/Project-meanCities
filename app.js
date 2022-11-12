@@ -12,6 +12,11 @@ app.use(function(req,res,next){
     next();
 })
 
+app.use("/api",function(req,res,next){
+    res.header('Access-Control-Allow-Origin','http://localhost:4200');
+    next();
+})
+
 app.use("/api", routes);
 
 app.use(express.static(path.join(__dirname,"public")));
