@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http'
-import { City } from './cities/cities.component';
+import { Attraction, City } from './cities/cities.component';
 import { Observable } from 'rxjs/internal/Observable';
 
 @Injectable({
@@ -20,6 +20,14 @@ export class CitiesDataService {
   public getCity(cityId:string):Observable<City>{
     const url:string = this._baseUrl+"/cities/"+cityId;
     return this._http.get(url) as Observable<City>;
+  }
+  public deleteCity(cityId:string):Observable<City>{
+    const url:string = this._baseUrl+"/cities/"+cityId;
+    return this._http.delete(url) as Observable<City>;
+  }
+  public deleteAttraction(cityId:string,attractionId:string):Observable<Attraction>{
+    const url:string= this._baseUrl+"/cities/"+cityId+"/attractions/"+attractionId;
+    return this._http.delete(url) as Observable<Attraction>;
   }
 
 }

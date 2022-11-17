@@ -31,7 +31,31 @@ const _addAttraction = function (req, res, city) {
 module.exports.addOne = function (req, res) {
     console.log("Add One attractions Controller");
     const cityId = req.params.cityId;
-    City.findById(cityId).select("attractions").exec(function (err, city) {
+    if (!mongoose.isValidObjectId(cityId)) {
+        res.status(process.env.WRONG_INPUT_ERROR_STATUS).json({ "message": "Not valid ID" });
+        return;
+    }
+    const response = { status: parseInt(process.env.OK_STATUS_CODE), message: {} };
+    City.findById(cityId).select("attractions").exec()
+    .then(city=>{
+        if (!city) {
+            console.log("Error finding city");
+            response.status = process.env.NOT_FOUND_STATUS_CODE;
+            response.message = { "message": "city ID not found " + cityId };
+            res.status(response.status).json(response.message);
+        }else{
+            _addAttraction(req, res, city);
+        }
+    })
+    .catch(err=>{
+        console.log("Error finding city");
+        response.status = process.env.INTERNAL_SERVER_ERROR_STATUS;
+        response.message = err;
+        res.status(response.status).json(response.message);
+    });
+    
+        
+    /* City.findById(cityId).select("attractions").exec(function (err, city) {
         console.log("Found city ", city);
         const response = { status: process.env.OK_STATUS_CODE, message: city };
         if (err) {
@@ -48,7 +72,7 @@ module.exports.addOne = function (req, res) {
         } else {
             res.status(response.status).json(response.message);
         }
-    });
+    }); */
 }
 
 
@@ -71,7 +95,33 @@ const _deleteAttraction = function (req, res, city) {
 module.exports.deleteOne = function (req, res) {
     console.log("Delete One attractions Controller");
     const cityId = req.params.cityId;
-    City.findById(cityId).select("attractions").exec(function (err, city) {
+    if (!mongoose.isValidObjectId(cityId)) {
+        res.status(process.env.WRONG_INPUT_ERROR_STATUS).json({ "message": "Not valid ID" });
+        return;
+    }
+    const response = { status: process.env.OK_STATUS_CODE };
+    City.findById(cityId).select("attractions").exec()
+    .then(city=>{
+        if (!city) {
+            console.log("Error finding city");
+            response.status = process.env.NOT_FOUND_STATUS_CODE;
+            response.message = { "message": "city ID not found " + cityId };
+            res.status(response.status).json(response.message);
+        }else{
+            _deleteAttraction(req, res, city);
+        }
+    })
+    .catch(err=>{
+        console.log("Error finding city");
+        response.status = process.env.INTERNAL_SERVER_ERROR_STATUS;
+        response.message = err;
+        res.status(response.status).json(response.message);
+    })
+    ;
+        
+        
+       
+    /* City.findById(cityId).select("attractions").exec(function (err, city) {
         console.log("Found city ", city);
         const response = { status: process.env.OK_STATUS_CODE, message: city.attractions };
         if (err) {
@@ -88,7 +138,7 @@ module.exports.deleteOne = function (req, res) {
         } else {
             res.status(response.status).json(response.message);
         }
-    });
+    }); */
 }
 
 const _getAttraction = function (req, res, city) {
@@ -110,7 +160,29 @@ const _getAttraction = function (req, res, city) {
 module.exports.getOne = function (req, res) {
     console.log("Get One attractions Controller");
     const cityId = req.params.cityId;
-    City.findById(cityId).select("attractions").exec(function (err, city) {
+    if (!mongoose.isValidObjectId(cityId)) {
+        res.status(process.env.WRONG_INPUT_ERROR_STATUS).json({ "message": "Not valid ID" });
+        return;
+    }
+    const response = { status: process.env.OK_STATUS_CODE, message: {} };
+    City.findById(cityId).select("attractions").exec()
+    .then(city=>{
+        if (!city) {
+            console.log("Error finding city");
+            response.status = process.env.NOT_FOUND_STATUS_CODE;
+            response.message = { "message": "city ID not found " + cityId };
+            res.status(response.status).json(response.message);
+        }else{
+            _getAttraction(req, res, city);
+        }
+    })
+    .catch(err=>{
+        console.log("Error finding city");
+        response.status = process.env.INTERNAL_SERVER_ERROR_STATUS;
+        response.message = err;
+        res.status(response.status).json(response.message);
+    });
+    /* City.findById(cityId).select("attractions").exec(function (err, city) {
         console.log("Found city ", city);
         const response = { status: process.env.OK_STATUS_CODE, message: city.attractions };
         if (err) {
@@ -127,7 +199,7 @@ module.exports.getOne = function (req, res) {
         } else {
             res.status(response.status).json(response.message);
         }
-    });
+    }); */
 }
 
 

@@ -1,3 +1,4 @@
+const { response } = require("express");
 const mongoose = require("mongoose");
 const City = mongoose.model(process.env.CITY_MODEL);
 module.exports.getAll = function (req, res) {
@@ -19,7 +20,7 @@ module.exports.getAll = function (req, res) {
         res.status(process.env.WRONG_INPUT_ERROR_STATUS).json({ "message": process.env.MESSAGE_ERROR_COUNT_MAX + maxCount });
         return;
     }    
-    City.find().skip(offset).limit(count).exec(function (err, cities) {
+    /* City.find().skip(offset).limit(count).exec(function (err, cities) {
         if (err) {
             console.log(process.env.MESSAGE_ERROR_FINDING_CITIES);
             res.status(process.env.INTERNAL_SERVER_ERROR_STATUS).json(err);
@@ -27,6 +28,21 @@ module.exports.getAll = function (req, res) {
             console.log(process.env.MESSAGE_SUCCESS_FINDING_CITIES, cities.length);
             res.status(process.env.OK_STATUS_CODE).json(cities);
         }
+    }); */
+
+    const response = {status:parseInt(process.env.OK_STATUS_CODE), message:{}};
+    City.find().skip(offset).limit(count).exec()
+    .then(cities=>{
+        console.log(process.env.MESSAGE_SUCCESS_FINDING_CITIES, cities.length);
+        response.message=cities;
+    })
+    .catch(err=>{
+        console.log(process.env.MESSAGE_ERROR_FINDING_CITIES);
+        response.status=parseInt(process.env.INTERNAL_SERVER_ERROR_STATUS);
+        response.message(err);
+    })
+    .finally(()=>{
+        res.status(response.status).json(response.message);
     });
 
 
@@ -34,7 +50,11 @@ module.exports.getAll = function (req, res) {
 
 module.exports.getOne = function (req, res) {
     const cityId = req.params.cityId;
-    City.findById(cityId).exec(function (err, city) {
+    if (!mongoose.isValidObjectId(cityId)) {
+        res.status(process.env.WRONG_INPUT_ERROR_STATUS).json({ "message": "Not valid ID" });
+        return;
+    }
+    /* City.findById(cityId).exec(function (err, city) {
         const response = {
             status: process.env.OK_STATUS_CODE,
             message: city
@@ -49,6 +69,29 @@ module.exports.getOne = function (req, res) {
             response.message = { "message": process.env.MESSAGE_ERROR_CITY_ID_NOT_FOUND };
         }
         res.status(response.status).json(response.message);                
+    }); */
+
+    const response = {
+        status: parseInt(process.env.OK_STATUS_CODE),
+        message: {}
+    };
+    City.findById(cityId).exec()
+    .then(city=>{
+        if (!city) {
+            console.log(process.env.MESSAGE_ERROR_CITY_ID_NOT_FOUND);
+            response.status = process.env.NOT_FOUND_STATUS_CODE;
+            response.message = process.env.MESSAGE_ERROR_CITY_ID_NOT_FOUND;
+        }else{
+            response.message=city;
+        }        
+    })
+    .catch(err=>{
+        console.log(process.env.MESSAGE_ERROR_FINDING_CITY);
+        response.status = process.env.INTERNAL_SERVER_ERROR_STATUS;
+        response.message = err;
+    })
+    .finally(()=>{
+        res.status(response.status).json(response.message)
     });
 }
 
@@ -71,7 +114,32 @@ module.exports.addOne = function (req, res) {
 
 module.exports.deleteOne = function (req, res) {
     const cityId = req.params.cityId;
-    City.findByIdAndDelete(cityId).exec(function(err,deletedCity){
+    if (!mongoose.isValidObjectId(cityId)) {
+        res.status(process.env.WRONG_INPUT_ERROR_STATUS).json({ "message": "Not valid ID" });
+        return;
+    }
+    const response = {
+        status: process.env.OK_STATUS_CODE,
+        message: {}
+    };
+
+    City.findByIdAndDelete(cityId).exec()
+    .then(deletedCity=>{
+        if (!deletedCity) {
+            console.log("City id not found");
+            response.status = process.env.NOT_FOUND_STATUS_CODE;
+            response.message = "City ID not found";
+        }else{
+            response.message=deletedCity;
+        }
+    })    
+    .catch(err=>{
+            console.log("Error deleting city");
+            response.status = process.env.INTERNAL_SERVER_ERROR_STATUS;
+            response.message = err;
+    })
+    .finally(res.status(response.status).json(response.message));
+    /* City.findByIdAndDelete(cityId).exec(function(err,deletedCity){
         const response = {
             status: process.env.OK_STATUS_CODE,
             message: deletedCity
@@ -86,7 +154,7 @@ module.exports.deleteOne = function (req, res) {
             response.message = { "message": "City ID not found" };
         }
         res.status(response.status).json(response.message);
-    });    
+    });   */  
 }
 
 function _returnCityFull(req,city){
@@ -111,6 +179,10 @@ function _returnCityPartial(req,city){
 
 function _updateOne(req,res,functionToBeCalled){
     const cityId = req.params.cityId;
+    if (!mongoose.isValidObjectId(cityId)) {
+        res.status(process.env.WRONG_INPUT_ERROR_STATUS).json({ "message": "Not valid ID" });
+        return;
+    }
     City.findById(cityId).exec(function (err, city) {
         if (err) {
             res.status(process.env.INTERNAL_SERVER_ERROR_STATUS).json(err);

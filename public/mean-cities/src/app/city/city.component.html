@@ -1,3 +1,11 @@
 <h1>{{city.cityName}} - {{city.countryName}}</h1>
-<br/>
 {{city.yearVisited}}
+
+<ul>
+    <li *ngFor="let attraction of city.attractions">
+    {{attraction.name}}: {{attraction.interestingFacts}}
+    <button (click)="deleteAttraction(city._id,attraction._id)">Delete Attraction</button>
+    </li>
+</ul>
+
+<button (click)="deleteCity(city._id)">Delete City</button>
