@@ -31,7 +31,10 @@ export class CityComponent implements OnInit {
   deleteAttraction(cityId:string,attractionId:string){
     this._citiesService.deleteAttraction(cityId,attractionId).subscribe(value=>{
       console.log(value);
-      this._routerNav.navigate(['cities']);
+      const cityId:string=this._router.snapshot.params["cityId"];
+      this._citiesService.getCity(cityId).subscribe(value=>{
+        this.city=value;
+      });
     });
   }
 

@@ -1,0 +1,14 @@
+<form [formGroup]="attractionForm" (ngSubmit)="onSubmit()">
+    <div>
+        <label>
+            name: <input formControlName="name"/>
+        </label>
+    </div>
+    <div>
+        <label>
+            interestingFacts: <input formControlName="interestingFacts"/>
+        </label>
+    </div>       
+    <button type="submit">Submit</button>
+</form>
+

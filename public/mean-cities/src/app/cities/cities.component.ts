@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { CitiesDataService } from '../cities-data.service';
 
 export class Attraction {
-  #_id:string;
+  #_id!:string;
   private _name: string;
   private _interestingFacts: string;
 
@@ -32,10 +33,17 @@ export class Attraction {
   }
 
 
-  constructor(id:string, name: string, interestingFacts: string) {
+  constructor(name: string, interestingFacts: string) {
     this._name = name
-    this._interestingFacts = interestingFacts
-    this.#_id=id;
+    this._interestingFacts = interestingFacts    
+  }
+
+  toJSON(){
+    const obj={
+      name:this.name,
+      interestingFacts:this.interestingFacts
+    }
+    return obj;
   }
 
 
@@ -67,12 +75,35 @@ export class City {
   set countryName(countryName: string) { this.#countryName = countryName }
   set yearVisited(yearVisited: number) { this.#yearVisited = yearVisited }
 
-  constructor(id: string, cityName: string, countryName: string, yearVisited: number) {
+/*  constructor(id: string, cityName: string, countryName: string, yearVisited: number) {
     this.#_id = id;
     this.#cityName = cityName;
     this.#countryName = countryName;
     this.#yearVisited = yearVisited;
+  }*/
+
+    constructor(cityName: string, countryName: string, yearVisited: number) {    
+      this.#cityName = cityName;
+      this.#countryName = countryName;
+      this.#yearVisited = yearVisited;
+    }
+
+  fillCityFromForm(form:FormGroup){
+    console.log(form.value);
+    this.#cityName = form.value.cityName;
+    this.#countryName = form.value.countryName;
+    this.#yearVisited = form.value.yearVisited;
   }
+
+  toJSON(){
+    let obj={
+      "cityName":this.cityName,
+      "countryName":this.countryName,
+      "yearVisited":this.yearVisited
+    };
+    return obj;
+  }
+  
 
 }
 

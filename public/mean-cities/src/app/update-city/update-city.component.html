@@ -1,0 +1,19 @@
+<form [formGroup]="cityForm" (ngSubmit)="onSubmit()">
+    <div>
+        <label>
+            cityName: <input formControlName="cityName"/>
+        </label>
+    </div>
+    <div>
+        <label>
+            countryName: <input formControlName="countryName"/>
+        </label>
+    </div>
+    <div>
+        <label>
+            yearVisited: <input formControlName="yearVisited"/>
+        </label>
+    </div>    
+    <button type="submit">Submit</button>
+</form>
+

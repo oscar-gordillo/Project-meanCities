@@ -104,7 +104,7 @@ module.exports.addOne = function (req, res) {
     City.create(newCity, function (err, city) {
         const response = { status: process.env.OK_STATUS_CODE_INSERT, message: city };
         if (err) {
-            console.log("Error creating city");
+            console.log("Error creating city",err);
             response.status = process.env.INTERNAL_SERVER_ERROR_STATUS;
             response.message = err;
         }

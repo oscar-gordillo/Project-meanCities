@@ -5,7 +5,10 @@
     <li *ngFor="let attraction of city.attractions">
     {{attraction.name}}: {{attraction.interestingFacts}}
     <button (click)="deleteAttraction(city._id,attraction._id)">Delete Attraction</button>
+    <button routerLink="/updateattraction/{{city._id}}/{{attraction._id}}">Update Attraction</button>
     </li>
+    <button routerLink="/addAttraction/{{city._id}}">Add Attraction</button>
 </ul>
 
 <button (click)="deleteCity(city._id)">Delete City</button>
+<button routerLink="/updatecity/{{city._id}}">Update City</button>
