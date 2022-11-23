@@ -1,7 +1,7 @@
 <h1>{{city.cityName}} - {{city.countryName}}</h1>
 {{city.yearVisited}}
 
-<ul>
+<!-- <ul>
     <li *ngFor="let attraction of city.attractions">
     {{attraction.name}}: {{attraction.interestingFacts}}
     <button (click)="deleteAttraction(city._id,attraction._id)">Delete Attraction</button>
@@ -9,6 +9,32 @@
     </li>
     <button routerLink="/addAttraction/{{city._id}}">Add Attraction</button>
 </ul>
-
+ -->
+ <br/>
 <button (click)="deleteCity(city._id)">Delete City</button>
 <button routerLink="/updatecity/{{city._id}}">Update City</button>
+<br/>
+<br/>
+<h2>Attractions</h2>
+<button routerLink="/addAttraction/{{city._id}}">Add Attraction</button>
+ <table>
+    <tr>
+        <th>Attraction Name</th>
+        <th>Interesting Facts</th>
+        <th>Delete Attraction</th>
+        <th>Updated Attraction</th>
+        <th>Picture</th>
+        <th>Video</th>
+    </tr>
+    <tr *ngFor="let attraction of city.attractions">
+        <td>{{attraction.name}}</td>
+        <td>{{attraction.interestingFacts}}</td>
+        <td><button (click)="deleteAttraction(city._id,attraction._id)">Delete</button></td>
+        <td><button routerLink="/updateattraction/{{city._id}}/{{attraction._id}}">Update</button></td>
+        <td><img *ngIf="attraction.image" src="{{attraction.image}}" width="150px" height="150px"/></td>
+        <td><video *ngIf="attraction.video" autoplay controls src="{{attraction.video}}" width="150px" height="150px">
+            The video tag is not supported by your browser.
+          </video></td>
+    </tr>
+ </table> 
+

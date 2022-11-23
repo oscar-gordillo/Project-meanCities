@@ -5,7 +5,9 @@ const attractionSchema= new mongoose.Schema({
         type: String,
         required: true
     },
-    interestingFacts: String
+    interestingFacts: String,
+    image:String,
+    video:String
     });
 
 const citySchema= new mongoose.Schema({

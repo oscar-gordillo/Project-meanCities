@@ -6,6 +6,37 @@ export class Attraction {
   #_id!:string;
   private _name: string;
   private _interestingFacts: string;
+  private _image:string;
+  private _video:string;
+
+    public get video(): string {
+        return this._video;
+    }
+
+    public set video(video: string) {
+        this._video = video;
+    }
+
+
+    public get image(): string {
+        return this._image;
+    }
+
+    public set image(image: string) {
+        this._image = image;
+    }
+
+
+  /* private _image!:Buffer;
+
+    public get image(): Buffer {
+        return this._image;
+    }
+
+    public set image(image: Buffer) {
+        this._image = image;
+    } */
+
 
   public get _id(): string {
     return this.#_id;
@@ -33,15 +64,19 @@ export class Attraction {
   }
 
 
-  constructor(name: string, interestingFacts: string) {
+  constructor(name: string, interestingFacts: string, image:string, video:string) {
     this._name = name
     this._interestingFacts = interestingFacts    
+    this._image=image;
+    this._video=video;
   }
 
   toJSON(){
     const obj={
       name:this.name,
-      interestingFacts:this.interestingFacts
+      interestingFacts:this.interestingFacts,
+      image:this.image,
+      video:this.video
     }
     return obj;
   }

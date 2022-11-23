@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const City = mongoose.model(process.env.CITY_MODEL);
+
 module.exports.getAll = function (req, res) {
     console.log("GET attractions Controller");
     const cityId = req.params.cityId;
@@ -9,12 +10,18 @@ module.exports.getAll = function (req, res) {
     });
 }
 const _addAttraction = function (req, res, city) {
-    
-    const newAtracction = {
-        name: req.body.name, interestingFacts: req.body.interestingFacts
-    };
 
+    const newAtracction = {
+        name: req.body.name, 
+        interestingFacts: req.body.interestingFacts,
+        image:req.body.image,
+        video:req.body.video
+    };
+    console.log('adding new attraction');
+    
     city.attractions.push(newAtracction);
+
+    console.log('pushing new attraction');
 
     city.save(function (err, updatedCity) {
         const response = { status: process.env.OK_STATUS_CODE, message: [] };
@@ -143,15 +150,17 @@ module.exports.deleteOne = function (req, res) {
 
 const _getAttraction = function (req, res, city) {
     console.log(req.params.attractionId);
-    console.log(city.attractions);
+    //console.log(city.attractions);
     let attraction = city.attractions.find( attraction => attraction._id == req.params.attractionId );
-    console.log(attraction);
+    //console.log(attraction);
     const response = { status: process.env.OK_STATUS_CODE, message: [] };
     if (!attraction) {
         response.status = process.env.INTERNAL_SERVER_ERROR_STATUS;
         response.message = 'Attraction ID Not Found';
     } else {
         response.status = process.env.OK_STATUS_CODE;
+        //attraction.image=new Buffer(attraction.image).toString('base64');
+        //console.log(new Buffer(attraction.image).toString('base64'));
         response.message = attraction;
     }
     res.status(response.status).json(response.message);        
@@ -207,9 +216,11 @@ module.exports.getOne = function (req, res) {
 
 const _updateAttractionFull = function (req, res, city) {
     let index = city.attractions.findIndex( attraction => attraction._id == req.params.attractionId );
-    if (index!=-1) {
+    if (index!=-1) {        
         city.attractions[index].name=req.body.name;
         city.attractions[index].interestingFacts=req.body.interestingFacts;
+        city.attractions[index].image=req.body.image;
+        city.attractions[index].video=req.body.video;
     }else{
         res.status(process.env.NOT_FOUND_STATUS_CODE).json("Attraction Id NOT FOUND");
         return;
@@ -244,6 +255,10 @@ const _updateAttractionPartial = function (req, res, city) {
             city.attractions[index].name=req.body.name;
         if (req.body.interestingFacts)
             city.attractions[index].interestingFacts=req.body.interestingFacts;
+        if (req.body.image)
+            city.attractions[index].image=req.body.image;
+        if (req.body.video)
+            city.attractions[index].video=req.body.video;
     }else{
         res.status(process.env.NOT_FOUND_STATUS_CODE).json("Attraction Id NOT FOUND");
         return;

@@ -12,6 +12,8 @@ import { Attraction } from '../cities/cities.component';
 export class UpdateAttractionComponent implements OnInit {
 
   attractionForm!:FormGroup;
+  image!:string;
+  video!:string;
 
   constructor(private _formBuilder:FormBuilder,private _cityService:CitiesDataService,private _router:ActivatedRoute,private _routerNav:Router) { 
     
@@ -21,9 +23,19 @@ export class UpdateAttractionComponent implements OnInit {
     const cityId:string=this._router.snapshot.params["cityId"];
     const attractionId:string=this._router.snapshot.params["attractionId"];
     this._cityService.getAttraction(attractionId,cityId).subscribe(value=>{
+      
+      //console.log(value.image);
+      this.image=value.image;
+      this.video=value.video;
+
+      //console.log(new Buffer(value.image).toString('base64'));
+
+      
+
       this.attractionForm=this._formBuilder.group({
         name: value.name,      
-        interestingFacts: value.interestingFacts  
+        interestingFacts: value.interestingFacts    ,
+         
       });
     });
 
@@ -33,12 +45,34 @@ export class UpdateAttractionComponent implements OnInit {
     console.log(this.attractionForm.value);
     const cityId:string=this._router.snapshot.params["cityId"];
     const attractionId:string=this._router.snapshot.params["attractionId"];
-    let newAttraction:Attraction=new Attraction(this.attractionForm.value.name,this.attractionForm.value.interestingFacts);
+    let newAttraction:Attraction=new Attraction(this.attractionForm.value.name
+      ,this.attractionForm.value.interestingFacts
+      ,this.image
+      ,this.video);
     newAttraction._id=attractionId;
     this._cityService.updateAttraction(newAttraction,cityId).subscribe(value=>{
       console.log(value);
       this._routerNav.navigate(['/city/'+cityId]);
     });
+  }
+
+  handleUpload(event:any) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+        console.log(reader.result);
+        this.image=reader.result as string;        
+    };
+  }
+  handleUploadVideo(event:any) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+        console.log(reader.result);
+        this.video=reader.result as string;        
+    };
   }
 
 }

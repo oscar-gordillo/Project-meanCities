@@ -17,6 +17,10 @@ import { AddCityComponent } from './add-city/add-city.component';
 import { AddAttractionComponent } from './add-attraction/add-attraction.component';
 import { UpdateCityComponent } from './update-city/update-city.component';
 import { UpdateAttractionComponent } from './update-attraction/update-attraction.component';
+import { RegisterComponent } from './register/register.component';
+import { LoginComponent } from './login/login.component';
+
+import {JwtHelperService,JWT_OPTIONS} from '@auth0/angular-jwt'
 
 @NgModule({
   declarations: [
@@ -30,7 +34,9 @@ import { UpdateAttractionComponent } from './update-attraction/update-attraction
     AddCityComponent,
     AddAttractionComponent,
     UpdateCityComponent,
-    UpdateAttractionComponent
+    UpdateAttractionComponent,
+    RegisterComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -45,6 +51,14 @@ import { UpdateAttractionComponent } from './update-attraction/update-attraction
       {
           path: "cities",
           component: CitiesComponent
+      },
+      {
+          path: "register",
+          component: RegisterComponent
+      },
+      {
+          path: "login",
+          component: LoginComponent
       },
       {
           path: "addCity",
@@ -73,7 +87,9 @@ import { UpdateAttractionComponent } from './update-attraction/update-attraction
   }
       ])
   ],
-  providers: [],
+  providers: [
+    {provide:JWT_OPTIONS,useValue:JWT_OPTIONS},JwtHelperService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

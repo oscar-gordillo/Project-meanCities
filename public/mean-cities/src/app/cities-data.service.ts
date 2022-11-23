@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http'
+import {HttpClient,HttpHeaders} from '@angular/common/http'
 import { Attraction, City } from './cities/cities.component';
 import { Observable } from 'rxjs/internal/Observable';
+import { AuthenticationService } from './authentication.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,11 +11,12 @@ export class CitiesDataService {
 
   private _baseUrl:string = "http://localhost:3000/api";
 
-  constructor(private _http:HttpClient) { }
+  constructor(private _http:HttpClient, public _authenticationService:AuthenticationService) { }
 
   public getCities():Observable<City[]>{
     const url:string = this._baseUrl+"/cities";
-    return this._http.get(url) as Observable<City[]>;
+    const headers = new HttpHeaders({'authorization':'Bearer '+this._authenticationService.token});
+    return this._http.get(url,{headers: headers}) as Observable<City[]>;
 
   }
   public getCity(cityId:string):Observable<City>{

@@ -8,6 +8,23 @@
         <label>
             interestingFacts: <input formControlName="interestingFacts"/>
         </label>
-    </div>       
+    </div>      
+    <div>
+        <label>
+            Picture: <input type="file" (change)="handleUpload($event)" accept=".png, .jpg, .jpeg, .gif">
+        </label>
+        <img src="{{image}}" width="150px" height="150px"/>
+        </div>
+        <div>
+
+        <label>
+            Video: <input type="file" (change)="handleUploadVideo($event)" accept=".mp4">
+        </label>
+
+        <video autoplay controls src="{{video}}" width="150px" height="150px">
+            The video tag is not supported by your browser.
+          </video>
+
+    </div>  
     <button type="submit">Submit</button>
 </form>
