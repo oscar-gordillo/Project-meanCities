@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl,FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 import { CitiesDataService } from '../cities-data.service';
 import { City } from '../cities/cities.component';
 
@@ -25,13 +26,12 @@ export class AddCityComponent implements OnInit {
   ngOnInit(): void {
   }
   onSubmit(){
-    //console.log(this.cityForm.value);
+    
     let newCity:City=new City(this.cityForm.value.cityName,this.cityForm.value.countryName,this.cityForm.value.yearVisited);
-    //newCity.fillCityFromForm(this.cityForm);
-    //console.log(newCity.toJSON());
+    
     this._cityService.addCity(newCity).subscribe(value=>{
-      console.log(value);
-      this._routerNav.navigate(['cities']);
+    
+      this._routerNav.navigate([environment.path_cities]);
     });
   }
 

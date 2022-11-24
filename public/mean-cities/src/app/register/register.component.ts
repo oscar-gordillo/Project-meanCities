@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { CitiesDataService } from '../cities-data.service';
+import { environment } from 'src/environments/environment';
 import { UsersDataService } from '../users-data.service';
 
 export class User {
@@ -87,7 +87,7 @@ export class RegisterComponent implements OnInit {
       ,this.registerForm.value.password);
       this._userService.register(user).subscribe(value=>{
         console.log(value);
-        this._routerNav.navigate(['']);
+        this._routerNav.navigate([environment.path_root]);
       });
   }
 

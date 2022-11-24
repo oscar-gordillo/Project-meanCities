@@ -20,13 +20,12 @@ export class LoginComponent implements OnInit {
   }
 
   onLogin(loginForm:NgForm){
-    console.log('onLogin');
-    console.log(loginForm);
-    console.log(this.user);
+    
+    
     this._userService.login(this.user).subscribe(value=>{
-      console.log(value);
+    
       this._authenticationService.token=value;
-      console.log(this._authenticationService.name);
+    
     });
   }
   logout(){

@@ -3,13 +3,13 @@ require("./cities-model");
 require("./users-model");
 mongoose.connect(process.env.DB_URL, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.connection.on("connected", function() {
-    console.log("Mongoose connected to "+ process.env.DB_NAME);
+    console.log(process.env.MONGOOSE_CONN_MESSAGE+ process.env.DB_NAME);
 });
 mongoose.connection.on("disconnected", function() {
-    console.log("Mongoose disconnected");
+    console.log(process.env.MONGOOSE_DISCONN_MESSAGE);
 });
 mongoose.connection.on("error", function(err) {
-    console.log("Mongoose connection error "+ err);
+    console.log(process.env.MONGOOSE_CONN_ERROR_MESSAGE+ err);
 });
 process.on("SIGINT", function() {
     mongoose.connection.close(function() {

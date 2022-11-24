@@ -27,15 +27,7 @@ export class Attraction {
     }
 
 
-  /* private _image!:Buffer;
-
-    public get image(): Buffer {
-        return this._image;
-    }
-
-    public set image(image: Buffer) {
-        this._image = image;
-    } */
+  
 
 
   public get _id(): string {
@@ -110,12 +102,7 @@ export class City {
   set countryName(countryName: string) { this.#countryName = countryName }
   set yearVisited(yearVisited: number) { this.#yearVisited = yearVisited }
 
-/*  constructor(id: string, cityName: string, countryName: string, yearVisited: number) {
-    this.#_id = id;
-    this.#cityName = cityName;
-    this.#countryName = countryName;
-    this.#yearVisited = yearVisited;
-  }*/
+
 
     constructor(cityName: string, countryName: string, yearVisited: number) {    
       this.#cityName = cityName;

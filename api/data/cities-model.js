@@ -22,4 +22,4 @@ const citySchema= new mongoose.Schema({
         yearVisited:Number,
         attractions:[attractionSchema]
     });    
-mongoose.model("City", citySchema, "cities");    
+mongoose.model(process.env.CITY_MODEL, citySchema, process.env.CITIES_COLLECTION_NAME);    

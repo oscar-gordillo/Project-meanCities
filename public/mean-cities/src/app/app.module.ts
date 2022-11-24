@@ -21,6 +21,7 @@ import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 
 import {JwtHelperService,JWT_OPTIONS} from '@auth0/angular-jwt'
+import { environment } from 'src/environments/environment';
 
 @NgModule({
   declarations: [
@@ -45,44 +46,44 @@ import {JwtHelperService,JWT_OPTIONS} from '@auth0/angular-jwt'
     FormsModule,
     RouterModule.forRoot([
       {
-        path: "",
+        path: environment.path_root,
         component: HomeComponent
       },
       {
-          path: "cities",
+          path: environment.path_cities,
           component: CitiesComponent
       },
       {
-          path: "register",
+          path: environment.path_register,
           component: RegisterComponent
       },
       {
-          path: "login",
+          path: environment.path_login,
           component: LoginComponent
       },
       {
-          path: "addCity",
+          path: environment.path_add_city,
           component: AddCityComponent
       },
       {
-        path: "city/:cityId",
+        path: environment.path_city,
         component: CityComponent
       },
       {
-        path: "updatecity/:cityId",
+        path: environment.path_update_city,
         component: UpdateCityComponent
       },
       {
-        path: "updateattraction/:cityId/:attractionId",
+        path: environment.path_aupdate_attraction,
         component: UpdateAttractionComponent
       },
       {
-        path: "addAttraction/:cityId",
+        path: environment.path_add_attraction,
         component: AddAttractionComponent
       },
 
     {
-      path: "**",
+      path: environment.path_error_page,
       component: ErrorPageComponent
   }
       ])

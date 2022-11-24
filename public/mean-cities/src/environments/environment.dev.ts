@@ -1,6 +1,6 @@
 export const environment = {
-  production: true,
-  environment: "Production",
+  production: false,
+  environment: "Development",
   base_url_api: "http://localhost:3000/api",
   base_url_users: "/users/",
   base_url_login_users: "/users/login/",

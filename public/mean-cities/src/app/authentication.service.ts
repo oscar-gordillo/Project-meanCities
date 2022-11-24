@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {JwtHelperService} from '@auth0/angular-jwt'
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -7,10 +8,10 @@ import {JwtHelperService} from '@auth0/angular-jwt'
 export class AuthenticationService {
 
   set token(token:string){
-    localStorage.setItem("token",token);
+    localStorage.setItem(environment.token_name,token);
   }
   get token(){
-    return localStorage.getItem("token") as string;
+    return localStorage.getItem(environment.token_name) as string;
   }
 
   get isLoggedIn(){
